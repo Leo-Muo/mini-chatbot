@@ -11,6 +11,7 @@ To use the custom TinyLlama model:
 1. Download and install Ollama locally - https://ollama.com/download
 2. Run this command from the root of the repository:
    ```
+   ollama pull tinyllama
    ollama create gunther -f model/Modelfile
    ```
 
