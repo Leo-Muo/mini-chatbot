@@ -8,7 +8,7 @@ A simple chat bot implementation using Ollama with the TinyLlama model. This pro
 
 To use the custom TinyLlama model:
 
-1. Download and install Ollama locally
+1. Download and install Ollama locally - https://ollama.com/download
 2. Run this command from the root of the repository:
    ```
    ollama create gunther -f model/Modelfile
