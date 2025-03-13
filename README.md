@@ -20,8 +20,8 @@ To use the custom TinyLlama model:
 
 1. Create and activate a virtual environment:
    ```
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python3 -m venv backend/venv
+   source backend/.venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 2. Install dependencies:
