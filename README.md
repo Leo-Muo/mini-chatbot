@@ -38,7 +38,7 @@ Ensure Docker is running locally, then:
 
 2. Install dependencies:
    ```
-   pip install --ignore-installed -r requirements.txt
+   pip install --ignore-installed -r backend/requirements.txt
    ```
 
 3. Start the FastAPI server:
@@ -61,4 +61,4 @@ Ensure Docker is running locally, then:
 
 ## Usage
 
-Access the chatbot through your web browser at the URL provided by the frontend development server (typically http://localhost:3000 or similar).
+Access the chatbot through your web browser at the URL provided by the frontend development server (http://localhost:3000).
