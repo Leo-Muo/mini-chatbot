@@ -11,24 +11,10 @@ To use the custom TinyLlama model:
 1. Download and install Ollama locally - https://ollama.com/download
 2. Run this command from the root of the repository:
    ```
+   ollama start
    ollama pull tinyllama
    ollama create gunther -f model/Modelfile
    ```
-
-### Docker Setup
-
-Ensure Docker is running locally, then:
-
-1. Pull the Ollama image:
-   ```
-   docker pull ollama/ollama
-   ```
-
-2. Run the container:
-   ```
-   docker run -d -v <Path to ollama dir>/.ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
-   ```
-   This can be located in /usr/share/ollama/
 
 ### Backend Setup
 
