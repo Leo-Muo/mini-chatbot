@@ -28,6 +28,7 @@ Ensure Docker is running locally, then:
    ```
    docker run -d -v <Path to ollama dir>/.ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
    ```
+   This can be located in /usr/share/ollama/
 
 ### Backend Setup
 
