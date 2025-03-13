@@ -44,6 +44,7 @@ To use the custom TinyLlama model:
 
 3. Start the development server:
    ```
+   npm i
    npm run dev
    ```
 
