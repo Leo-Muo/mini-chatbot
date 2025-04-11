@@ -26,8 +26,6 @@ export default function ChatInterface() {
   }, [messages]);
 
 
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (input.trim() === "") return;
@@ -44,6 +42,22 @@ export default function ChatInterface() {
         body: JSON.stringify({ message: input }),
       });
   
+      if (!response.ok) {
+        console.log(response)
+        const contentType = response.headers.get("content-type");
+      
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await response.json();
+          console.log(errorData.detail)
+          throw new Error(errorData.detail || 'An error occurred');
+        } else {
+          const errorText = await response.text();
+          console.log(errorText)
+          throw new Error(errorText || `Error ${response.status}`);
+        }
+
+      }
+
       const data = await response.json();
   
       const aiMessage: Message = {
@@ -56,7 +70,7 @@ export default function ChatInterface() {
       console.error("Error fetching response:", error);
       const errorMessage: Message = {
         role: "assistant",
-        content: "Sorry, there was an error processing your request.",
+        content: `Sorry, there was an error: ${error instanceof Error ? error.message : "Unknown error"}`,
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
