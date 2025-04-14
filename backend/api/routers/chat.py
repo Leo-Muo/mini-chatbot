@@ -6,7 +6,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from api.models.chat import ChatRequest
 from dotenv import load_dotenv
 from pathlib import Path
-import ollama
+from  ollama import AsyncClient
 import os
 import logging
 import sys
@@ -43,14 +43,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Ollama client
-try:
-    client = ollama.Client(host=OLLAMA_URL)
-    logger.info("Successfully initialized Ollama client")
-except Exception as e:
-    logger.error(f"Failed to initialize Ollama client: {str(e)}")
-    client = None
-
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request, exc):
     logger.error(f"HTTP exception: {exc}")
@@ -72,18 +64,42 @@ async def validation_exception_handler(request, exc):
 
 @router.get("/api/health")
 async def health_check():
+
+    # Initialize Ollama client
+    try:
+        client = AsyncClient(host=OLLAMA_URL)
+        logger.info("Successfully initialized Ollama client")
+    except Exception as e:
+        logger.error(f"Failed to initialize Ollama client: {str(e)}")
+        client = None
+
+
     try:
         if client:
-            client.list()
+            await client.list()
             return {"status": "ok", "ollama_status": "connected"}
         else:
             return {"status": "degraded", "ollama_status": "not initialized"}
     except Exception as e:
         logger.error(f"Health check failed for Ollama: {str(e)}")
-        return {"status": "degraded", "ollama_status": "unavailable"}
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "degraded",
+                "ollama_status": "unavailable"
+            })
 
 @router.post("/api/chat")
 async def chat(request: ChatRequest):
+
+    # Initialize Ollama client
+    try:
+        client = AsyncClient(host=OLLAMA_URL)
+        logger.info("Successfully initialized Ollama client")
+    except Exception as e:
+        logger.error(f"Failed to initialize Ollama client: {str(e)}")
+        client = None
+
     logger.info(f"Received chat request")
     
     if not client:
@@ -95,15 +111,15 @@ async def chat(request: ChatRequest):
     
     try: 
         logger.info(f"Sending request to Ollama model 'gunther'")
-        response = client.chat(
+        response = await client.chat(
             model='gunther',
-            messages=[{"role": "user", "content": request.message}],
-        )
+                messages=[{"role": "user", "content": request.message}],
+            )
         logger.info("Successfully received response from Ollama")
         content = response["message"]["content"]
         return {"message": content}
         
-    except ollama.ResponseError as e:
+    except AsyncClient.ResponseError as e:
         error_msg = f"Ollama response error: {e.error}, code: {e.status_code}"
         logger.error(error_msg)
         
